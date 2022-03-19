@@ -1,5 +1,9 @@
 const Cafe = require('../models').Cafe;
+const EmployeeAllocation = require('../models').EmployeeAllocation;
+
 const ApiError = require('../utils/ApiError');
+
+const employeeService = require('../services/employee.service');
 
 const getAllCafes = async (args) => {
     const { location } = args;
@@ -31,7 +35,12 @@ const remove = async (cafeId) => {
     if (!cafe) {
         throw new ApiError(404, 'Cafe not found');
     }
+    const allocatedEmployeeIds = await getAllocatedEmployeeIds(cafeId);
     await cafe.destroy(cafeId);
+    await EmployeeAllocation.destroy({
+        where: { employeeId }
+    });
+    await employeeService.removeEmployeeByIds(allocatedEmployeeIds);
     return cafe;
 }
 
@@ -42,6 +51,13 @@ const findCafeByName = async (name) => {
 const findCafeById = async (id) => {
     return Cafe.find({ where: { id } });
 }
+
+const getAllocatedEmployeeIds = async (cafeId) => {
+    return EmployeeAllocation.findAll({ 
+        attributes: ['employeeId'], 
+        where: { cafeId } 
+    });
+};
 
 module.exports = {
     getAllCafes,

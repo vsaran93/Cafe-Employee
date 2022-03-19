@@ -16,7 +16,8 @@ const validateEmployee = (employeeData) => {
         name: Joi.string().required(),
         emailAddress: Joi.string().email().required(),
         phoneNumber: Joi.string().required(),
-        gender: Joi.string().required()
+        gender: Joi.string().required(),
+        cafeId: Joi.string().required(),
     });
     return employeeSchema.validate(employeeData);
 }
