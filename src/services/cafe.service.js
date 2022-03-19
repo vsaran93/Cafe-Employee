@@ -1,4 +1,5 @@
 const Cafe = require('../models').Cafe;
+const ApiError = require('../utils/ApiError');
 
 const getAllCafes = async (args) => {
     const { location } = args;
@@ -12,7 +13,7 @@ const getAllCafes = async (args) => {
 const create = async (cafeData) => {
     const isCafeExist = await findCafeByName(cafeData.name);
     if (isCafeExist) {
-        return false;
+        throw new ApiError(400, 'Cafe already Exist');
     }
     return Cafe.create(cafeData);
 }
@@ -20,13 +21,13 @@ const create = async (cafeData) => {
 const update = async (cafeData, cafeId) => {
     const cafe = await findCafeById(cafeId);
     if (!cafe) {
-        return false;
+        throw new ApiError(404, 'Cafe not found');
     }
     return cafe.update(cafeData);
 }
 
 const findCafeByName = async (name) => {
-    return Cafe.find({ where: { name } });
+    return Cafe.findOne({ where: { name } });
 }
 
 const findCafeById = async (id) => {
