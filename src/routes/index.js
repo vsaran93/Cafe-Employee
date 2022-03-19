@@ -3,11 +3,16 @@ const router = express.Router();
 
 
 const cafeRoutes = require('./cafe.routes');
+const employeeRoutes = require('./employee.routes');
 
 const defaultRoutes = [
     {
         path: '/cafe',
         route: cafeRoutes
+    },
+    {
+        path: '/employee',
+        route: employeeRoutes
     }
 ];
 

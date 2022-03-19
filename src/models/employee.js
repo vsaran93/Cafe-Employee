@@ -1,0 +1,16 @@
+const { uuid } = require('uuidv4');
+
+module.exports = (sequelize, DataTypes) => {
+    const Employee = sequelize.define('Employee', {
+        id: {
+          type: DataTypes.UUID,
+          primaryKey: true,
+          defaultValue: uuid()
+        },
+        name: DataTypes.STRING,
+        emailAddress: DataTypes.STRING,
+        phoneNumber: DataTypes.STRING(8),
+        gender: DataTypes.ENUM(['male', 'female']),
+    }, {});
+    return Employee;
+};

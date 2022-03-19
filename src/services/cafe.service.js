@@ -26,6 +26,15 @@ const update = async (cafeData, cafeId) => {
     return cafe.update(cafeData);
 }
 
+const remove = async (cafeId) => {
+    const cafe = await findCafeById(cafeId);
+    if (!cafe) {
+        throw new ApiError(404, 'Cafe not found');
+    }
+    await cafe.destroy(cafeId);
+    return cafe;
+}
+
 const findCafeByName = async (name) => {
     return Cafe.findOne({ where: { name } });
 }
@@ -37,5 +46,6 @@ const findCafeById = async (id) => {
 module.exports = {
     getAllCafes,
     create,
-    update
+    update,
+    remove
 }

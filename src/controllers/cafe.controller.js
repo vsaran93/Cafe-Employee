@@ -40,8 +40,22 @@ const update = async (req, res) => {
 };
 
 
+const remove = async (req, res) => {
+    try {
+        if (!req.params.id) {
+            const cafe = await cafeService.remove(req.params.id);
+            res.status(200).json({ data: cafe });
+        } else {
+            res.status(400).json({ msg: 'Bad request' });
+        }
+    } catch (e) {
+        res.status(500).json({ msg: 'internal server error' });
+    }
+};
+
 module.exports = {
     getAllCafes,
     create,
-    update
+    update,
+    remove
 };
