@@ -1,9 +1,11 @@
+import { Fragment } from 'react';
+import Routes from './routes';
 
 function App() {
   return (
-    <div>
-      <h2>Welcome to cafe employee</h2>
-    </div>
+    <Fragment>
+        <Routes />
+    </Fragment>
   );
 }
 

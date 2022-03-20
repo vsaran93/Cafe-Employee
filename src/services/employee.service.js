@@ -1,6 +1,6 @@
 const { Op } = require('sequelize');
+const Cafe = require('../models').Cafe;
 const Employee = require('../models').Employee;
-const EmployeeAllocation = require('../models').EmployeeAllocation;
 const ApiError = require('../utils/ApiError');
 
 
@@ -9,12 +9,10 @@ const create = async (employeeData) => {
     if (isEmployeeExist) {
         throw ApiError(400, 'Employee already exist');
     }
-    const employee =  await Employee.create(employeeData);
-    await EmployeeAllocation.create({
-        employeeId: employee.id,
-        cafeId: employeeData.cafeId,
-        startDate: new Date()
-    });
+
+    const employee =  await Employee.build(employeeData);
+    employee.startDate = new Date();
+    await employee.save();
     return employee;
 };
 
@@ -23,9 +21,6 @@ const update = async (employeeData, employeeId) => {
     if (!employee) {
         throw ApiError(404, 'Employee not found');
     }
-    await EmployeeAllocation.update({ cafeId: employeeData.cafeId }, {
-        where: { employeeId }
-    })
     return employee.update(employeeData);
 };
 
@@ -34,12 +29,26 @@ const remove = async (employeeId) => {
     if (!employee) {
         throw ApiError(404, 'Employee not found');
     }
-    await EmployeeAllocation.destroy({
-        where: { employeeId }
-    })
     await employee.destroy(employeeId);
     return employee;
 };
+
+const getAllEmployees = async (args) => {
+    const { cafe } = args;
+    const whereObj = {};
+    if (cafe) {
+        whereObj.cafeId = cafe;
+    }
+    return Employee.findAll({ 
+        where: whereObj,
+        include: [
+            {
+                model: Cafe,
+                attributes: ['name'],
+            }
+        ]
+    });
+}
 
 const removeEmployeeByIds = async (Ids) => {
     await Employee.destroy({
@@ -62,5 +71,6 @@ module.exports = {
     create,
     update,
     remove,
-    removeEmployeeByIds
+    removeEmployeeByIds,
+    getAllEmployees
 }

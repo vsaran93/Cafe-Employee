@@ -1,5 +1,6 @@
 const Cafe = require('../models').Cafe;
 const EmployeeAllocation = require('../models').EmployeeAllocation;
+const Employee = require('../models').Employee;
 
 const ApiError = require('../utils/ApiError');
 
@@ -11,7 +12,15 @@ const getAllCafes = async (args) => {
     if (location) {
         whereObj.location = location;
     }
-    return Cafe.findAll({ where: whereObj });
+    return Cafe.findAll({ 
+        where: whereObj,
+        include: [
+            {
+                model: Employee,
+                attributes: ['name'],
+            }
+        ]
+    });
 }
 
 const create = async (cafeData) => {

@@ -11,6 +11,13 @@ module.exports = (sequelize, DataTypes) => {
         emailAddress: DataTypes.STRING,
         phoneNumber: DataTypes.STRING(8),
         gender: DataTypes.ENUM(['male', 'female']),
+        cafeId: DataTypes.UUID,
+        startDate: DataTypes.DATE,
     }, {});
+
+    Employee.associate = function(models) {
+      Employee.belongsTo(models.Cafe, { foreignKey: 'cafeId' });
+    };
+
     return Employee;
 };

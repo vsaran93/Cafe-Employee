@@ -8,6 +8,6 @@ router.put('/:id', cafeController.update);
 
 router.delete('/:id', cafeController.remove);
 
-router.get('/', cafeController.getAllCafes);
+
 
 module.exports = router;

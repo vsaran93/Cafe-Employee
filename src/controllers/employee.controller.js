@@ -1,6 +1,17 @@
 const employeeService = require('../services/employee.service');
 const { validateEmployee } = require('../utils/validation');
 
+
+const getAllEmployees = async (req, res) => {
+    try {
+        const employees = await employeeService.getAllEmployees(req.query);
+        res.status(200).json({ data: employees });
+    } catch (e) {
+        res.status(500).json({ msg: 'internal server error' });
+    }
+}
+
+
 const create = async (req, res) => {
     try {
         const { error } = validateEmployee(req.body);
@@ -47,5 +58,6 @@ const remove = async (req, res) => {
 module.exports = {
     create,
     update,
-    remove
+    remove,
+    getAllEmployees
 }
