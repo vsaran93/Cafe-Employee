@@ -1,0 +1,7 @@
+export const API_URL = process.env.REACT_APP_API_URL;
+
+export const header = {
+    headers: {
+        'Content-Type': 'application/json'
+    }
+};
