@@ -4,7 +4,7 @@ import Employee from '../components/Employee';
 import Cafe from '../components/Cafe';
 
 
-const routes = () => {
+const AppRoutes = () => {
     return (
         <Router>
             <Routes>
@@ -15,4 +15,4 @@ const routes = () => {
     )
 };
 
-export default routes;
+export default AppRoutes;

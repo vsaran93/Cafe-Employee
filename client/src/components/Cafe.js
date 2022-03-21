@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { connect } from 'react-redux';
 import { getAllCafes } from '../actions/cafeAction';
+import { Navigate } from 'react-router-dom';
 
 
 class Cafe extends Component {
@@ -11,8 +12,15 @@ class Cafe extends Component {
             { field: "logo" },
             { field: "name" },
             { field: "description" },
-            { field: "location" },
-        ]
+            { field: "location", filter: 'agTextColumnFilter' },
+            {
+                headerName: 'Employees',
+                valueGetter: function (params) {
+                    const names = params.data.Employees.map(employee => employee.name).join(", ")
+                    return names
+                }
+            }
+        ],
     };
 
     componentDidMount() {
@@ -31,14 +39,16 @@ class Cafe extends Component {
 
     render() {
         const { rowData, columnDefs } = this.state;
-        console.log(rowData);
         return (
             <div>
                 <div id="myGrid" className="ag-theme-alpine">
                     <div style={{ width: '100%', height: '100%' }}>
                         <AgGridReact
                             rowData={rowData}
-                            columnDefs={columnDefs}>
+                            columnDefs={columnDefs}
+                            rowSelection="single"
+                            onCellClicked={(e) => <Navigate to={`/employees?cafeName=${e.data.name}`} />}
+                        >
                         </AgGridReact>
                     </div>
                 </div>

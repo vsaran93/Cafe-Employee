@@ -5,11 +5,10 @@ const ApiError = require('../utils/ApiError');
 
 
 const create = async (employeeData) => {
-    const isEmployeeExist = await findEmployeeByEmail(employeeData.email);
+    const isEmployeeExist = await findEmployeeByEmail(employeeData.emailAddress);
     if (isEmployeeExist) {
-        throw ApiError(400, 'Employee already exist');
+        throw new ApiError(400, 'Employee already exist');
     }
-
     const employee =  await Employee.build(employeeData);
     employee.startDate = new Date();
     await employee.save();
@@ -19,7 +18,7 @@ const create = async (employeeData) => {
 const update = async (employeeData, employeeId) => {
     const employee = await findEmployeeById(employeeId);
     if (!employee) {
-        throw ApiError(404, 'Employee not found');
+        throw new ApiError(404, 'Employee not found');
     }
     return employee.update(employeeData);
 };
@@ -27,7 +26,7 @@ const update = async (employeeData, employeeId) => {
 const remove = async (employeeId) => {
     const employee = await findEmployeeById(employeeId);
     if (!employee) {
-        throw ApiError(404, 'Employee not found');
+        throw new ApiError(404, 'Employee not found');
     }
     await employee.destroy(employeeId);
     return employee;
@@ -58,12 +57,12 @@ const removeEmployeeByIds = async (Ids) => {
     });
 };
 
-const findEmployeeByEmail = (email) => {
-    return Employee.findOne({ email });
+const findEmployeeByEmail = (emailAddress) => {
+    return Employee.findOne({ where: { emailAddress } });
 };
 
 const findEmployeeById = (id) => {
-    return Employee.findOne({ id });
+    return Employee.findOne({ where: { id } });
 };
 
 

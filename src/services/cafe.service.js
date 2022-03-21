@@ -1,5 +1,4 @@
 const Cafe = require('../models').Cafe;
-const EmployeeAllocation = require('../models').EmployeeAllocation;
 const Employee = require('../models').Employee;
 
 const ApiError = require('../utils/ApiError');
@@ -12,12 +11,13 @@ const getAllCafes = async (args) => {
     if (location) {
         whereObj.location = location;
     }
-    return Cafe.findAll({ 
+    return Cafe.findAll({
+        attributes: ['name', 'description', 'logo', 'location'],
         where: whereObj,
         include: [
             {
                 model: Employee,
-                attributes: ['name'],
+                attributes: ['id', 'name'],
             }
         ]
     });
@@ -46,9 +46,6 @@ const remove = async (cafeId) => {
     }
     const allocatedEmployeeIds = await getAllocatedEmployeeIds(cafeId);
     await cafe.destroy(cafeId);
-    await EmployeeAllocation.destroy({
-        where: { employeeId }
-    });
     await employeeService.removeEmployeeByIds(allocatedEmployeeIds);
     return cafe;
 }
@@ -62,7 +59,7 @@ const findCafeById = async (id) => {
 }
 
 const getAllocatedEmployeeIds = async (cafeId) => {
-    return EmployeeAllocation.findAll({ 
+    return Employee.findAll({ 
         attributes: ['employeeId'], 
         where: { cafeId } 
     });

@@ -6,7 +6,7 @@ const getAllCafes = async (req, res) => {
         const cafes = await cafeService.getAllCafes(req.query);
         res.status(200).json({ data: cafes });
     } catch (e) {
-        res.status(500).json({ msg: 'internal server error' });
+        res.status(e.statusCode || 500).json({ msg: e.message || 'internal error' });
     }
 }
 
