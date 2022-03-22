@@ -1,1 +1,4 @@
 export const FETCH_ALL_CAFES = 'FETCH_ALL_CAFES';
+
+
+export const FETCH_ALL_EMPLOYEES = 'FETCH_ALL_EMPLOYEES';
