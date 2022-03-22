@@ -12,7 +12,7 @@ const getAllCafes = async (args) => {
         whereObj.location = location;
     }
     return Cafe.findAll({
-        attributes: ['name', 'description', 'logo', 'location'],
+        attributes: ['id', 'name', 'description', 'logo', 'location'],
         where: whereObj,
         include: [
             {
