@@ -7,8 +7,8 @@ class ActionCellRenderer extends Component {
       this.editClickedHandler = this.editClickedHandler.bind(this);
       this.deleteClickHandler = this.deleteClickHandler.bind(this);
     }
-    editClickedHandler() {
-     this.props.edit(this.props.value);
+    editClickedHandler(e) {
+     this.props.edit(this.props);
     }
     deleteClickHandler() {
       this.props.delete(this.props.value);

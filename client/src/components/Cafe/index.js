@@ -11,35 +11,39 @@ import ActionCellRenderer from '../ActionCellRender';
 
 
 class Cafe extends Component {
-    state = {
-        rowData: [],
-        columnDefs: [
-            { field: "logo" },
-            { field: "name" },
-            { field: "description" },
-            { field: "location", filter: 'agTextColumnFilter' },
-            {
-                headerName: 'Employees',
-                valueGetter: function (params) {
-                    const names = params.data.Employees.map(employee => employee.name).join(", ")
-                    return names
-                }
-            },
-            {
-                headerName: 'Action',
-                cellRenderer: 'actionCellRenderer',
-                cellRendererParams: {
-                  edit: function() {
-                    alert(`edit clicked`);
-                  },
-                  delete: function() {
-                    alert(`delete clicked`);
-                  },
+    constructor(props) {
+        super(props);
+        this.state = {
+            rowData: [],
+            columnDefs: [
+                { field: "logo" },
+                { field: "name" },
+                { field: "description" },
+                { field: "location", filter: 'agTextColumnFilter' },
+                {
+                    headerName: 'Employees',
+                    valueGetter: function (params) {
+                        const names = params.data.Employees.map(employee => employee.name).join(", ")
+                        return names
+                    }
                 },
-            }
-        ],
-        selectedCafeName: ''
-    };
+                {
+                    headerName: 'Action',
+                    cellRenderer: 'actionCellRenderer',
+                    cellRendererParams: {
+                      edit: function(params) {
+                        props.navigate(`/cafe/edit/${params.data.id}`);
+                      },
+                      delete: function() {
+                        props.navigate('/employee');
+                      },
+                    },
+                }
+            ],
+            selectedCafeName: ''
+        };
+    }
+    
 
     componentDidMount() {
         const { getAllCafes } = this.props;
