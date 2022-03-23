@@ -1,4 +1,4 @@
-const { uuid } = require('uuidv4');
+const { v4:uuid } = require('uuid');
 
 module.exports = (sequelize, DataTypes) => {
     const Cafe = sequelize.define('Cafe', {

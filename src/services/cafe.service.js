@@ -55,7 +55,7 @@ const findCafeByName = async (name) => {
 }
 
 const findCafeById = async (id) => {
-    return Cafe.find({ where: { id } });
+    return Cafe.findOne({ where: { id } });
 }
 
 const getAllocatedEmployeeIds = async (cafeId) => {
@@ -69,5 +69,6 @@ module.exports = {
     getAllCafes,
     create,
     update,
-    remove
+    remove,
+    findCafeById
 }
