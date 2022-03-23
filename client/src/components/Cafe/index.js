@@ -8,12 +8,14 @@ import Typography from '@mui/material/Typography';
 import Header from '../Header';
 import { getAllCafes } from '../../actions/cafeAction';
 import ActionCellRenderer from '../ActionCellRender';
+import ConfirmModal from '../Modals/ConfirmModal';
 
 
 class Cafe extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            openModal: false,
             rowData: [],
             columnDefs: [
                 { field: "logo" },
@@ -34,8 +36,8 @@ class Cafe extends Component {
                       edit: function(params) {
                         props.navigate(`/cafe/edit/${params.data.id}`);
                       },
-                      delete: function() {
-                        props.navigate('/employee');
+                      delete: () => {
+                        this.openModal()
                       },
                     },
                 }
@@ -66,8 +68,16 @@ class Cafe extends Component {
         this.setState({ selectedCafeName: params.data.name });
     }
 
+    closeModal = () => {
+        this.setState({ openModal: false });
+    };
+
+    openModal = () => {
+        this.setState({ openModal: true });
+    };
+
     render() {
-        const { rowData, columnDefs, selectedCafeName } = this.state;
+        const { rowData, columnDefs, selectedCafeName, openModal } = this.state;
 
         if (selectedCafeName) {
             return <Navigate to={`/employee?cafeName=${selectedCafeName}`} />
@@ -95,6 +105,10 @@ class Cafe extends Component {
                         </div>
                     </div>
                 </Container>
+                <ConfirmModal 
+                    open={openModal} 
+                    closeModal={this.closeModal} 
+                />
             </div>
         );
     };

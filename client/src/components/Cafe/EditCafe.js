@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
@@ -6,6 +6,12 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { makeStyles } from '@mui/styles';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { setLoading } from '../../actions/spinnerAction';
+import { getCafeDetails, updateCafe } from '../../actions/cafeAction';
+import LinearProgress from '../LinearProgress';
 
 import Header from '../Header';
 
@@ -21,8 +27,46 @@ const useStyles = makeStyles({
         justifyContent: 'center'
     }
 });
-const EditCafe = () => {
+const EditCafe = (props) => {
+    const [ cafe, setCafe ] = useState({})
     const classes = useStyles();
+    const dispatch = useDispatch();
+    const { cafeDetails } = useSelector(state => state.cafe);
+    const { isLoading } = useSelector(state => state.spinner);
+    const params = useParams();
+
+    const goBack = () => {
+        const { navigate } = props;
+        navigate('/');
+    };
+
+
+    useEffect(() => {
+        dispatch(getCafeDetails(params.id))
+    }, [dispatch, params.id]);
+
+    useEffect(() => {
+        setCafe(cafeDetails);
+    }, [cafeDetails]);
+
+    const handleChange = (e) => {
+        setCafe({
+            ...cafe,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleSave = (e) => {
+        e.preventDefault();
+        dispatch(setLoading());
+        dispatch(updateCafe({
+            name: cafe.name,
+            description: cafe.description,
+            logo: cafe.logo,
+            location: cafe.location
+        }, params.id))
+    };
+
     return (
         <Fragment>
             <Header />
@@ -37,6 +81,7 @@ const EditCafe = () => {
                      <Typography component="h1" variant="h4" align="center">
                         Edit Cafe 
                     </Typography>
+                    <LinearProgress loading={isLoading} />
                      <Grid 
                         container 
                         spacing={{ xs: 2, md: 3 }} 
@@ -45,20 +90,56 @@ const EditCafe = () => {
                     >
                         <Grid item xs={12} sm={6}>
                             <label className='label'>Name</label>
-                            <TextField fullWidth id="standard-basic" variant="standard" />
+                            <TextField
+                                name="name"
+                                fullWidth 
+                                id="standard-basic" 
+                                variant="standard"
+                                value={cafe.name}
+                                onChange={handleChange}
+                            />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <label className='label'>Location</label>
-                            <TextField fullWidth id="standard-basic" variant="standard" />
+                            <TextField 
+                                name="location"
+                                fullWidth 
+                                id="standard-basic" 
+                                variant="standard"
+                                value={cafe.location}
+                                onChange={handleChange}
+                            />
                         </Grid>
                         <Grid item xs={12} sm={12}>
                             <label className='label'>description</label>
-                            <TextField fullWidth id="standard-basic" variant="standard" />
+                            <TextField 
+                                name="description"
+                                fullWidth 
+                                id="standard-basic" 
+                                variant="standard" 
+                                value={cafe.description}
+                                onChange={handleChange}
+                            />
                         </Grid>
                      </Grid>
                      <div className={classes.btnContainer}>
-                        <Button className={classes.actionBtn} variant="contained" color="error">Cancel</Button>
-                        <Button className={classes.actionBtn} variant="contained">Save</Button>
+                        <Button
+                            onClick={goBack}
+                            className={classes.actionBtn} 
+                            variant="contained"
+                            color="error"
+                            disabled={isLoading}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={handleSave}
+                            className={classes.actionBtn} 
+                            variant="contained"
+                            disabled={isLoading}
+                        >
+                            Save
+                        </Button>
                      </div>
                 </Box>
             </Container>
