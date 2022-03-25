@@ -71,5 +71,6 @@ module.exports = {
     update,
     remove,
     removeEmployeeByIds,
-    getAllEmployees
+    getAllEmployees,
+    findEmployeeById
 }

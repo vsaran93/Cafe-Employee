@@ -11,6 +11,14 @@ const getAllEmployees = async (req, res) => {
     }
 }
 
+const getEmployeeById = async (req, res) => {
+    try {
+        const employee = await employeeService.findEmployeeById(req.params.id);
+        res.status(200).json({ data: employee });
+    } catch (e) {
+        res.status(500).json({ msg: 'internal server error' });
+    }
+}
 
 const create = async (req, res) => {
     try {
@@ -59,5 +67,6 @@ module.exports = {
     create,
     update,
     remove,
-    getAllEmployees
+    getAllEmployees,
+    getEmployeeById
 }
