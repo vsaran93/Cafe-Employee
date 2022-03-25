@@ -20,6 +20,7 @@ const update = async (employeeData, employeeId) => {
     if (!employee) {
         throw new ApiError(404, 'Employee not found');
     }
+    employeeData.startDate = employee.startDate || new Date();
     return employee.update(employeeData);
 };
 

@@ -65,10 +65,17 @@ const getAllocatedEmployeeIds = async (cafeId) => {
     });
 };
 
+const availableCafes = () => {
+    return Cafe.findAll({
+        attributes: ['id', 'name'],
+    })
+};
+
 module.exports = {
     getAllCafes,
     create,
     update,
     remove,
-    findCafeById
+    findCafeById,
+    availableCafes
 }

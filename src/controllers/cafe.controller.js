@@ -62,10 +62,20 @@ const getCafeDetailsById = async (req, res) => {
     }
 };
 
+const availableCafes = async (req, res) => {
+    try {
+        const cafes = await cafeService.availableCafes();
+        res.status(200).json({ data: cafes });
+    } catch (e) {
+        res.status(500).json({ msg: 'internal server error' });
+    }
+};
+
 module.exports = {
     getAllCafes,
     create,
     update,
     remove,
-    getCafeDetailsById
+    getCafeDetailsById,
+    availableCafes
 };
