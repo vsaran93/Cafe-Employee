@@ -2,6 +2,7 @@ export const FETCH_ALL_CAFES = 'FETCH_ALL_CAFES';
 export const FETCH_CAFE_BY_ID = 'FETCH_CAFE_BY_ID';
 
 export const FETCH_ALL_EMPLOYEES = 'FETCH_ALL_EMPLOYEES';
+export const FETCH_EMPLOYEE_BY_ID = 'FETCH_EMPLOYEE_BY_ID';
 
 
 export const SET_LOADING = 'SET_LOADING';

@@ -135,7 +135,7 @@ class Cafe extends Component {
                             variant="contained"
                             onClick={this.openCreateModal}
                         >
-                            Create Cafe
+                            Add Cafe
                         </Button>
                     </div>
                     <div id="myGrid" className="ag-theme-alpine">

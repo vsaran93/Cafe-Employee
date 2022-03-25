@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FETCH_ALL_EMPLOYEES } from '../utils/types';
+import { FETCH_ALL_EMPLOYEES, FETCH_EMPLOYEE_BY_ID } from '../utils/types';
 import { API_URL, header } from '../utils/helper';
 
 export const getAllEmployees = () => {
@@ -14,6 +14,23 @@ export const getAllEmployees = () => {
             })
             .catch((e) => {
                 console.error('there something wrong fetching employees')
+            });
+    }
+}
+
+
+export const getEmployeeById = (employeeId) => {
+    return async (dispatch) => {
+        axios
+            .get(`${API_URL}/employee/${employeeId}`, header)
+            .then((res) => {
+                dispatch({
+                    type: FETCH_EMPLOYEE_BY_ID,
+                    data: res.data.data
+                });
+            })
+            .catch((e) => {
+                console.error('there something wrong fetching a employee')
             });
     }
 }

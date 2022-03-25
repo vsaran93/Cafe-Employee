@@ -1,7 +1,8 @@
 
-import { FETCH_ALL_EMPLOYEES } from '../utils/types';
+import { FETCH_ALL_EMPLOYEES, FETCH_EMPLOYEE_BY_ID } from '../utils/types';
 const initialState = {
     employees: [],
+    employeeDetails: {}
 };
 
 
@@ -12,6 +13,11 @@ const employeeReducer = (state = initialState, action) => {
                 ...state,
                 employees: action.data
             };
+        case FETCH_EMPLOYEE_BY_ID:
+            return {
+                ...state,
+                employeeDetails: action.data
+            }
         default:
             return state;
     }
