@@ -35,6 +35,21 @@ export const getCafeDetails= (cafeId) => {
     }
 }
 
+export const createCafe = (cafeData, onSuccess) => {
+    return async (dispatch) => {
+        axios
+            .post(`${API_URL}/cafe`, cafeData, header)
+            .then((res) => {
+                dispatch(stopLoading());
+                onSuccess();
+            })
+            .catch((e) => {
+                console.error('there something wrong creating cafes');
+                dispatch(stopLoading());
+            });
+    }
+}
+
 export const updateCafe = (cafeData, cafeId) => {
     return async (dispatch) => {
         axios
@@ -43,7 +58,8 @@ export const updateCafe = (cafeData, cafeId) => {
                 dispatch(stopLoading());
             })
             .catch((e) => {
-                console.error('there something wrong fetching cafes')
+                console.error('there something wrong updating cafes');
+                dispatch(stopLoading());
             });
     }
 }

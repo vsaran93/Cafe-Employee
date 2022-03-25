@@ -97,6 +97,7 @@ const EditCafe = (props) => {
                                 variant="standard"
                                 value={cafe.name}
                                 onChange={handleChange}
+                                autoFocus
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
