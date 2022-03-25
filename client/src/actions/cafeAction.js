@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FETCH_ALL_CAFES, FETCH_CAFE_BY_ID } from '../utils/types';
+import { FETCH_ALL_CAFES, FETCH_CAFE_BY_ID, FECTH_AVAILABLE_CAFES } from '../utils/types';
 import { API_URL, header } from '../utils/helper';
 import { stopLoading } from './spinnerAction';
 
@@ -10,6 +10,22 @@ export const getAllCafes = () => {
             .then((res) => {
                 dispatch({
                     type: FETCH_ALL_CAFES,
+                    data: res.data.data
+                });
+            })
+            .catch((e) => {
+                console.error('there something wrong fetching cafes')
+            });
+    }
+}
+
+export const availableCafes = () => {
+    return async (dispatch) => {
+        axios
+            .get(`${API_URL}/cafe/available-cafes`, header)
+            .then((res) => {
+                dispatch({
+                    type: FECTH_AVAILABLE_CAFES,
                     data: res.data.data
                 });
             })

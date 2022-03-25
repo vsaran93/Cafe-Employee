@@ -11,7 +11,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import NativeSelect from '@mui/material/NativeSelect';
 
 import { setLoading } from '../../actions/spinnerAction';
-import { getEmployeeById } from '../../actions/employeeAction';
+import { getEmployeeById, updateEmployee } from '../../actions/employeeAction';
+import { availableCafes } from '../../actions/cafeAction';
 import LinearProgress from '../LinearProgress';
 
 import Header from '../Header';
@@ -31,11 +32,29 @@ const useStyles = makeStyles({
         display: 'flex !important'
     }
 });
+
+const displayOptions = (cafes) => {
+    if (cafes && cafes.length > 0) {
+        return cafes.map((cafe) => (
+            <option key={cafe.id} value={cafe.id}>{cafe.name}</option>
+        ))
+    }
+};
+
+const employeeData = {
+    name: '',
+    emailAddress: '',
+    phoneNumber: '',
+    gender: '',
+    cafeId: ''
+};
+
 const EditEmployee = (props) => {
-    const [ employee, setEmployee ] = useState({})
+    const [ employee, setEmployee ] = useState(employeeData);
     const classes = useStyles();
     const dispatch = useDispatch();
     const { employeeDetails } = useSelector(state => state.employee);
+    const { availableCafesList } = useSelector(state => state.cafe);
     const { isLoading } = useSelector(state => state.spinner);
     const params = useParams();
 
@@ -44,11 +63,12 @@ const EditEmployee = (props) => {
         navigate('/employee');
     };
 
-
     useEffect(() => {
-        dispatch(getEmployeeById(params.id))
+        dispatch(getEmployeeById(params.id));
+        dispatch(availableCafes());
     }, [dispatch, params.id]);
 
+    
     useEffect(() => {
         setEmployee(employeeDetails);
     }, [employeeDetails]);
@@ -63,6 +83,13 @@ const EditEmployee = (props) => {
     const handleSave = (e) => {
         e.preventDefault();
         dispatch(setLoading());
+        dispatch(updateEmployee(params.id, {
+            name: employee.name,
+            emailAddress: employee.emailAddress,
+            phoneNumber: employee.phoneNumber,
+            gender: employee.gender,
+            cafeId: employee.cafeId
+        }));
     };
 
     return (
@@ -80,7 +107,7 @@ const EditEmployee = (props) => {
                         Edit Employee 
                     </Typography>
                     <LinearProgress loading={isLoading} />
-                     <Grid 
+                    <Grid 
                         container 
                         spacing={{ xs: 2, md: 3 }} 
                         columns={{ xs: 4, sm: 8, md: 12 }}
@@ -93,7 +120,7 @@ const EditEmployee = (props) => {
                                 fullWidth 
                                 id="standard-basic" 
                                 variant="standard"
-                                value={employee.name}
+                                value={employee.name || ''}
                                 onChange={handleChange}
                                 autoFocus
                             />
@@ -105,7 +132,7 @@ const EditEmployee = (props) => {
                                 fullWidth 
                                 id="standard-basic" 
                                 variant="standard"
-                                value={employee.emailAddress}
+                                value={employee.emailAddress || ''}
                                 onChange={handleChange}
                             />
                         </Grid>
@@ -116,18 +143,32 @@ const EditEmployee = (props) => {
                                 fullWidth 
                                 id="standard-basic" 
                                 variant="standard" 
-                                value={employee.phoneNumber}
+                                value={employee.phoneNumber || ''}
                                 onChange={handleChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <label className='label'>Gender</label>
                             <NativeSelect
+                                name="gender"
                                 className={classes.genderDropDown}
-                                value={employee.gender}
+                                value={employee.gender || ''}
+                                onChange={handleChange}
                             >
                                 <option value='male'>Male</option>
                                 <option value='female'>Female</option>
+                            </NativeSelect>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <label className='label'>Assigned Cafe</label>
+                            <NativeSelect
+                                name="cafeId"
+                                value={employee.cafeId || ''}
+                                className={classes.genderDropDown}
+                                onChange={handleChange}
+                            >
+                                <option>Select Cafe</option>
+                                {displayOptions(availableCafesList)}
                             </NativeSelect>
                         </Grid>
                      </Grid>
