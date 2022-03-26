@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { withStyles } from '@mui/styles';
 
-import MainLayout from '../Layouts/MainLayout';
+import MainLayout from '../../Layouts/MainLayout';
 import { getAllCafes, createCafe, deleteCafe } from '../../actions/cafeAction';
 import { setLoading } from '../../actions/spinnerAction';
 import ActionCellRenderer from '../ActionCellRender';

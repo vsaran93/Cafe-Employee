@@ -8,7 +8,7 @@ import { makeStyles } from '@mui/styles';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import MainLayout from '../Layouts/MainLayout';
+import MainLayout from '../../Layouts/MainLayout';
 import { setLoading } from '../../actions/spinnerAction';
 import { getCafeDetails, updateCafe } from '../../actions/cafeAction';
 import LinearProgress from '../LinearProgress';

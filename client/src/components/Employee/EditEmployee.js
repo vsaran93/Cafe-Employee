@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import NativeSelect from '@mui/material/NativeSelect';
 
-import MainLayout from '../Layouts/MainLayout';
+import MainLayout from '../../Layouts/MainLayout';
 import { setLoading } from '../../actions/spinnerAction';
 import { getEmployeeById, updateEmployee } from '../../actions/employeeAction';
 import { availableCafes } from '../../actions/cafeAction';

@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import { withStyles } from '@mui/styles';
 import Button from '@mui/material/Button';
 
-import MainLayout from '../Layouts/MainLayout';
+import MainLayout from '../../Layouts/MainLayout';
 import { getAllEmployees, createEmployee, deleteEmployee } from '../../actions/employeeAction';
 import { setLoading } from '../../actions/spinnerAction';
 import ActionCellRenderer from '../ActionCellRender';
