@@ -1,11 +1,10 @@
-const { v4:uuid } = require('uuid');
 
 module.exports = (sequelize, DataTypes) => {
     const Employee = sequelize.define('Employee', {
         id: {
           type: DataTypes.UUID,
           primaryKey: true,
-          defaultValue: uuid()
+          defaultValue: require('sequelize').UUIDV4
         },
         name: DataTypes.STRING,
         emailAddress: DataTypes.STRING,

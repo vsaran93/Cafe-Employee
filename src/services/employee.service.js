@@ -50,11 +50,14 @@ const getAllEmployees = async (args) => {
     });
 }
 
-const removeEmployeeByIds = async (Ids) => {
+const removeEmployeeByIds = async (Ids, transaction) => {
     await Employee.destroy({
         where: {
-            [Op.in]: Ids
-        }
+            id: {
+                [Op.in]: Ids
+            }
+        },
+        transaction
     });
 };
 

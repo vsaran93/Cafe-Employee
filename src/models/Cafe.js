@@ -1,11 +1,10 @@
-const { v4:uuid } = require('uuid');
 
 module.exports = (sequelize, DataTypes) => {
     const Cafe = sequelize.define('Cafe', {
         id: {
           type: DataTypes.UUID,
           primaryKey: true,
-          defaultValue: uuid()
+          defaultValue: require('sequelize').UUIDV4
         },
         name: DataTypes.STRING,
         description: DataTypes.STRING,

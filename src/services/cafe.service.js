@@ -1,5 +1,7 @@
+const sequelize = require('../models').sequelize;
 const Cafe = require('../models').Cafe;
 const Employee = require('../models').Employee;
+
 
 const ApiError = require('../utils/ApiError');
 
@@ -40,14 +42,21 @@ const update = async (cafeData, cafeId) => {
 }
 
 const remove = async (cafeId) => {
-    const cafe = await findCafeById(cafeId);
-    if (!cafe) {
-        throw new ApiError(404, 'Cafe not found');
+    const transaction = await sequelize.transaction();
+    try {
+        const cafe = await findCafeById(cafeId);
+        if (!cafe) {
+            throw new ApiError(404, 'Cafe not found');
+        }
+        const allocatedEmployeeIds = await getAllocatedEmployeeIds(cafeId);
+        await Cafe.destroy({ where: { id: cafeId }, transaction });
+        await employeeService.removeEmployeeByIds(allocatedEmployeeIds, transaction);
+        await transaction.commit();
+        return cafe;
+    } catch (e) {
+        await transaction.rollback();
     }
-    const allocatedEmployeeIds = await getAllocatedEmployeeIds(cafeId);
-    await cafe.destroy(cafeId);
-    await employeeService.removeEmployeeByIds(allocatedEmployeeIds);
-    return cafe;
+   
 }
 
 const findCafeByName = async (name) => {
@@ -59,10 +68,18 @@ const findCafeById = async (id) => {
 }
 
 const getAllocatedEmployeeIds = async (cafeId) => {
-    return Employee.findAll({ 
-        attributes: ['employeeId'], 
-        where: { cafeId } 
+    const employeeIds = [];
+    const employees = await Employee.findAll({ 
+        attributes: ['id'], 
+        where: { cafeId } ,
+        raw: true
     });
+    if (employees && employees.length > 0) {
+        employees.forEach((employee) => {
+            employeeIds.push(employee.id);
+        })
+    }
+    return employeeIds;
 };
 
 const availableCafes = () => {

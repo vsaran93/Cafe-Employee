@@ -50,7 +50,7 @@ const update = async (req, res) => {
 
 const remove = async (req, res) => {
     try {
-        if (!req.params.id) {
+        if (req.params.id) {
             const employee = await employeeService.remove(req.params.id);
             res.status(200).json({ data: employee });
         } else {
