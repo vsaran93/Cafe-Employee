@@ -34,9 +34,9 @@ const EditCafe = (props) => {
     const { cafeDetails } = useSelector(state => state.cafe);
     const { isLoading } = useSelector(state => state.spinner);
     const params = useParams();
+    const { navigate } = props;
 
-    const goBack = () => {
-        const { navigate } = props;
+    const goBack = () => {  
         navigate('/');
     };
 
@@ -64,7 +64,9 @@ const EditCafe = (props) => {
             description: cafe.description,
             logo: cafe.logo,
             location: cafe.location
-        }, params.id))
+        }, params.id, () => {
+            goBack();
+        }))
     };
 
     return (

@@ -66,15 +66,31 @@ export const createCafe = (cafeData, onSuccess) => {
     }
 }
 
-export const updateCafe = (cafeData, cafeId) => {
+export const updateCafe = (cafeData, cafeId, onSuccess) => {
     return async (dispatch) => {
         axios
             .put(`${API_URL}/cafe/${cafeId}`, cafeData, header)
             .then((res) => {
                 dispatch(stopLoading());
+                onSuccess();
             })
             .catch((e) => {
                 console.error('there something wrong updating cafes');
+                dispatch(stopLoading());
+            });
+    }
+}
+
+export const deleteCafe = (cafeId, onSuccess) => {
+    return async (dispatch) => {
+        axios
+            .delete(`${API_URL}/cafe/${cafeId}`, header)
+            .then((res) => {
+                dispatch(stopLoading());
+                onSuccess();
+            })
+            .catch((e) => {
+                console.error('there something wrong deleting cafes');
                 dispatch(stopLoading());
             });
     }

@@ -8,8 +8,11 @@ import { withStyles } from '@mui/styles';
 import Button from '@mui/material/Button';
 
 import Header from '../Header';
-import { getAllEmployees } from '../../actions/employeeAction';
+import { getAllEmployees, createEmployee, deleteEmployee } from '../../actions/employeeAction';
+import { setLoading } from '../../actions/spinnerAction';
 import ActionCellRenderer from '../ActionCellRender';
+import CreateEmployeeModal from '../Modals/CreateEmployeeModal';
+import ConfirmModal from '../Modals/ConfirmModal';
 
 
 const styles = {
@@ -26,6 +29,7 @@ class Employee extends Component {
         super(props);
         this.state = {
             rowData: [],
+            openConfirmModal: false,
             columnDefs: [
                 { field: "name" },
                 { field: "emailAddress" },
@@ -47,12 +51,15 @@ class Employee extends Component {
                         edit: (params) => {
                             props.navigate(`/employee/edit/${params.data.id}`);
                         },
-                        delete: function() {
-                            alert(`delete clicked`);
+                        delete: (params) => {
+                            this.handleOpenConfirmModal(params.data.id);
                         },
                     },
                 }
             ],
+            openCreateModal: false,
+            employee: {},
+            selectedEmployeeId: ''
         };
     }
     
@@ -75,10 +82,50 @@ class Employee extends Component {
         this.gridApi = params.api;
     }
 
+    handleInputChange = (e) => {
+        const { employee } = this.state;
+        employee[e.target.name] = e.target.value;
+        this.setState(employee)
+    };
+
+    closeCreateModal = () => {
+        this.setState({ openCreateModal: false })
+    };
+
+    openCreateModal = () => {
+        this.setState({ openCreateModal: true });
+    };
+
+    handleAddEmployee = (e) => {
+        const { employee } = this.state;
+        const { createEmployee, setLoading, getAllEmployees } = this.props;
+        e.preventDefault();
+        setLoading();
+        createEmployee(employee, () => {
+            getAllEmployees();
+            this.closeCreateModal();
+        })
+    };
+
+    handleDeleteEmployee = (e) => {
+        const { selectedEmployeeId } = this.state;
+        const { deleteEmployee, getAllEmployees, setLoading } = this.props;
+        e.preventDefault();
+        setLoading();
+        deleteEmployee(selectedEmployeeId, () => {
+            getAllEmployees();
+            this.handleOpenConfirmModal();
+        });
+    };
+
+    handleOpenConfirmModal = (employeeId = null) => {
+        const { openConfirmModal } = this.state;
+        this.setState({ openConfirmModal: !openConfirmModal, selectedEmployeeId: employeeId });
+    };
 
     render() {
-        const { rowData, columnDefs } = this.state;
-        const { classes } = this.props;
+        const { rowData, columnDefs, openCreateModal, openConfirmModal } = this.state;
+        const { classes, isLoading } = this.props;
         // const queryParams = new URLSearchParams(window.location.search);
         // const cafeName = queryParams.get('cafeName');
 
@@ -112,17 +159,34 @@ class Employee extends Component {
                         </div>
                     </div>
                 </Container>
+                <ConfirmModal 
+                    open={openConfirmModal}
+                    closeModal={this.handleOpenConfirmModal}
+                    handleDelete={this.handleDeleteEmployee} 
+                    isLoading={isLoading}
+                />
+                <CreateEmployeeModal 
+                    open={openCreateModal}
+                    isLoading={isLoading}
+                    closeModal={this.closeCreateModal}
+                    handleInputChange={this.handleInputChange}
+                    handleCreateEmployee={this.handleAddEmployee}
+                />
             </div>
         );
     };
 }
 
 const mapStateToProps = (state) => ({
-    employees: state.employee.employees
+    employees: state.employee.employees,
+    isLoading: state.spinner.isLoading
 });
 
 const mapDispatchToProps = {
-    getAllEmployees
+    getAllEmployees,
+    createEmployee,
+    deleteEmployee,
+    setLoading
 }
 
 

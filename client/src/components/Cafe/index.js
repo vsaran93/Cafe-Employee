@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import { withStyles } from '@mui/styles';
 
 import Header from '../Header';
-import { getAllCafes, createCafe } from '../../actions/cafeAction';
+import { getAllCafes, createCafe, deleteCafe } from '../../actions/cafeAction';
 import { setLoading } from '../../actions/spinnerAction';
 import ActionCellRenderer from '../ActionCellRender';
 import ConfirmModal from '../Modals/ConfirmModal';
@@ -49,13 +49,14 @@ class Cafe extends Component {
                       edit: function(params) {
                         props.navigate(`/cafe/edit/${params.data.id}`);
                       },
-                      delete: () => {
-                        this.openModal()
+                      delete: (params) => {
+                        this.openModal(params.data.id)
                       },
                     },
                 }
             ],
             selectedCafeName: '',
+            selectedCafeId: '',
             cafe: {},
         };
     }
@@ -83,11 +84,11 @@ class Cafe extends Component {
     }
 
     closeModal = () => {
-        this.setState({ openModal: false });
+        this.setState({ openModal: false, selectedCafeId: '' });
     };
 
-    openModal = () => {
-        this.setState({ openModal: true });
+    openModal = (cafeId) => {
+        this.setState({ openModal: true, selectedCafeId: cafeId });
     };
 
     openCreateModal = () => {
@@ -113,6 +114,17 @@ class Cafe extends Component {
         createCafe(cafe, () => {
             getAllCafes();
             this.closeCreateModal();
+        });
+    };
+
+    handleDeleteCafe = (e) => {
+        const { selectedCafeId } = this.state;
+        const { deleteCafe, setLoading, getAllCafes } = this.props;
+        e.preventDefault();
+        setLoading(true);
+        deleteCafe(selectedCafeId, () => {
+            getAllCafes();
+            this.closeModal();
         });
     };
 
@@ -155,7 +167,9 @@ class Cafe extends Component {
                 </Container>
                 <ConfirmModal 
                     open={openModal} 
-                    closeModal={this.closeModal} 
+                    closeModal={this.closeModal}
+                    handleDelete={this.handleDeleteCafe} 
+                    isLoading={isLoading}
                 />
                 <CreateCafeModal 
                     open={openCreateModal}
@@ -177,7 +191,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
     getAllCafes,
     createCafe,
-    setLoading
+    setLoading,
+    deleteCafe
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Cafe));

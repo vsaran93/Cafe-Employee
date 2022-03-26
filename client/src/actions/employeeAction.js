@@ -36,15 +36,47 @@ export const getEmployeeById = (employeeId) => {
     }
 }
 
-export const updateEmployee = (employeeId, employeeData) => {
+export const updateEmployee = (employeeId, employeeData, onSuccess) => {
     return async (dispatch) => {
         axios
             .put(`${API_URL}/employee/${employeeId}`, employeeData, header)
             .then((res) => {
                 dispatch(stopLoading());
+                onSuccess();
             })
             .catch((e) => {
+                dispatch(stopLoading());
                 console.error('there something wrong updating employee')
+            });
+    }
+}
+
+export const createEmployee = (employeeData, onSuccess) => {
+    return async (dispatch) => {
+        axios
+            .post(`${API_URL}/employee`, employeeData, header)
+            .then((res) => {
+                dispatch(stopLoading());
+                onSuccess();
+            })
+            .catch((e) => {
+                dispatch(stopLoading());
+                console.error('there something wrong creating employee')
+            });
+    }
+}
+
+export const deleteEmployee = (employeeId, onSuccess) => {
+    return async (dispatch) => {
+        axios
+            .delete(`${API_URL}/employee/${employeeId}`, header)
+            .then((res) => {
+                dispatch(stopLoading());
+                onSuccess();
+            })
+            .catch((e) => {
+                dispatch(stopLoading());
+                console.error('there something wrong deleting employee')
             });
     }
 }

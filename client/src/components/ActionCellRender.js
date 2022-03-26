@@ -11,7 +11,7 @@ class ActionCellRenderer extends Component {
      this.props.edit(this.props);
     }
     deleteClickHandler() {
-      this.props.delete(this.props.value);
+      this.props.delete(this.props);
     }
     render() {
       return (

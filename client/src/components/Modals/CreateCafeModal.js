@@ -23,7 +23,7 @@ export default function CreateCafeModal(props) {
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title">
-          {"Create Cafe"}
+          {"Add Cafe"}
         </DialogTitle>
         <DialogContent>
             <div>

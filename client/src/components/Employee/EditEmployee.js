@@ -14,6 +14,7 @@ import { setLoading } from '../../actions/spinnerAction';
 import { getEmployeeById, updateEmployee } from '../../actions/employeeAction';
 import { availableCafes } from '../../actions/cafeAction';
 import LinearProgress from '../LinearProgress';
+import { displayOptions } from '../../utils/helper';
 
 import Header from '../Header';
 
@@ -33,14 +34,6 @@ const useStyles = makeStyles({
     }
 });
 
-const displayOptions = (cafes) => {
-    if (cafes && cafes.length > 0) {
-        return cafes.map((cafe) => (
-            <option key={cafe.id} value={cafe.id}>{cafe.name}</option>
-        ))
-    }
-};
-
 const employeeData = {
     name: '',
     emailAddress: '',
@@ -57,9 +50,9 @@ const EditEmployee = (props) => {
     const { availableCafesList } = useSelector(state => state.cafe);
     const { isLoading } = useSelector(state => state.spinner);
     const params = useParams();
+    const { navigate } = props;
 
-    const goBack = () => {
-        const { navigate } = props;
+    const goBack = () => {  
         navigate('/employee');
     };
 
@@ -89,6 +82,8 @@ const EditEmployee = (props) => {
             phoneNumber: employee.phoneNumber,
             gender: employee.gender,
             cafeId: employee.cafeId
+        }, () => {
+            goBack()
         }));
     };
 
