@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -8,6 +7,8 @@ import { makeStyles } from '@mui/styles';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
+import TextField from '../TextField';
+import TextFieldLabel from '../TextFieldLabel';
 import MainLayout from '../../Layouts/MainLayout';
 import { setLoading } from '../../actions/spinnerAction';
 import { getCafeDetails, updateCafe } from '../../actions/cafeAction';
@@ -88,37 +89,35 @@ const EditCafe = (props) => {
                     style={{ marginTop: 10 }}
                 >
                     <Grid item xs={12} sm={6}>
-                        <label className='label'>Name</label>
+                        <TextFieldLabel name="Name"/>
                         <TextField
                             name="name"
-                            fullWidth 
-                            id="standard-basic" 
-                            variant="standard"
                             value={cafe.name}
                             onChange={handleChange}
+                            inputProps={{
+                                minLength: 6,
+                                maxlength: 10
+                            }}
                             autoFocus
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <label className='label'>Location</label>
+                        <TextFieldLabel name="Location"/>
                         <TextField 
-                            name="location"
-                            fullWidth 
-                            id="standard-basic" 
-                            variant="standard"
+                            name="Location"
                             value={cafe.location}
                             onChange={handleChange}
                         />
                     </Grid>
                     <Grid item xs={12} sm={12}>
-                        <label className='label'>description</label>
+                        <TextFieldLabel name="Description"/>
                         <TextField 
                             name="description"
-                            fullWidth 
-                            id="standard-basic" 
-                            variant="standard" 
                             value={cafe.description}
                             onChange={handleChange}
+                            inputProps={{
+                                maxlength: 256
+                            }}
                         />
                     </Grid>
                 </Grid>

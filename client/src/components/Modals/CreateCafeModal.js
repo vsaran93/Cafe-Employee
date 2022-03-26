@@ -5,9 +5,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
+
+import TextField from '../TextField';
+import TextFieldLabel from '../TextFieldLabel';
 import LinearProgress from '../LinearProgress';
 
 
@@ -35,33 +37,24 @@ export default function CreateCafeModal(props) {
                     style={{ marginTop: 10 }}
                 >
                     <Grid item xs={12} sm={6}>
-                        <label className='label'>Name</label>
+                        <TextFieldLabel name="Name" />
                         <TextField
                             name="name"
-                            fullWidth 
-                            id="standard-basic" 
-                            variant="standard"
                             autoFocus
                             onChange={handleInputChange}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <label className='label'>Location</label>
+                        <TextFieldLabel name="Location" />
                         <TextField 
                             name="location"
-                            fullWidth 
-                            id="standard-basic" 
-                            variant="standard"
                             onChange={handleInputChange}
                         />
                     </Grid>
                     <Grid item xs={12} sm={12}>
-                        <label className='label'>description</label>
+                        <TextFieldLabel name="Description" />
                         <TextField 
                             name="description"
-                            fullWidth 
-                            id="standard-basic" 
-                            variant="standard"
                             onChange={handleInputChange}
                         />
                     </Grid>

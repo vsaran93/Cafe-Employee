@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -9,6 +8,8 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import NativeSelect from '@mui/material/NativeSelect';
 
+import TextField from '../TextField';
+import TextFieldLabel from '../TextFieldLabel';
 import MainLayout from '../../Layouts/MainLayout';
 import { setLoading } from '../../actions/spinnerAction';
 import { getEmployeeById, updateEmployee } from '../../actions/employeeAction';
@@ -105,41 +106,36 @@ const EditEmployee = (props) => {
                     style={{ marginTop: 10 }}
                 >
                     <Grid item xs={12} sm={6}>
-                        <label className='label'>Name</label>
+                        <TextFieldLabel name="Name"/>
                         <TextField
                             name="name"
-                            fullWidth 
-                            id="standard-basic" 
-                            variant="standard"
-                            value={employee.name || ''}
+                            value={employee.name}
                             onChange={handleChange}
+                            inputProps={{
+                                minLength: 6,
+                                maxlength: 10
+                            }}
                             autoFocus
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <label className='label'>Email</label>
+                        <TextFieldLabel name="Email"/>
                         <TextField 
                             name="emailAddress"
-                            fullWidth 
-                            id="standard-basic" 
-                            variant="standard"
-                            value={employee.emailAddress || ''}
+                            value={employee.emailAddress}
                             onChange={handleChange}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <label className='label'>Phone</label>
+                        <TextFieldLabel name="Phone"/>
                         <TextField 
                             name="phoneNumber"
-                            fullWidth 
-                            id="standard-basic" 
-                            variant="standard" 
-                            value={employee.phoneNumber || ''}
+                            value={employee.phoneNumber}
                             onChange={handleChange}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <label className='label'>Gender</label>
+                        <TextFieldLabel name="Gender"/>
                         <NativeSelect
                             name="gender"
                             className={classes.genderDropDown}
@@ -151,7 +147,7 @@ const EditEmployee = (props) => {
                         </NativeSelect>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <label className='label'>Assigned Cafe</label>
+                        <TextFieldLabel name="Assigned Cafe"/>
                         <NativeSelect
                             name="cafeId"
                             value={employee.cafeId || ''}

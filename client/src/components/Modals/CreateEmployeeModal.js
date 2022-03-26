@@ -5,13 +5,14 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
 import NativeSelect from '@mui/material/NativeSelect';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@mui/styles';
 
+import TextField from '../TextField';
+import TextFieldLabel from '../TextFieldLabel';
 import { availableCafes } from '../../actions/cafeAction';
 import { displayOptions } from '../../utils/helper';
 import LinearProgress from '../LinearProgress';
@@ -54,39 +55,29 @@ export default function CreateEmployeeModal(props) {
                         style={{ marginTop: 10 }}
                     >
                         <Grid item xs={12} sm={6}>
-                            <label className='label'>Name</label>
+                            <TextFieldLabel name="Name" />
                             <TextField
                                 name="name"
-                                fullWidth 
-                                id="standard-basic" 
-                                variant="standard"
                                 onChange={handleInputChange}
                                 autoFocus
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <label className='label'>Email</label>
+                            <TextFieldLabel name="Email" />
                             <TextField 
                                 name="emailAddress"
-                                fullWidth 
-                                id="standard-basic" 
-                                variant="standard"
                                 onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <label className='label'>Phone</label>
+                            <TextFieldLabel name="Phone" />
                             <TextField
-                                type="number"
                                 name="phoneNumber"
-                                fullWidth 
-                                id="standard-basic" 
-                                variant="standard" 
                                 onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <label className='label'>Gender</label>
+                            <TextFieldLabel name="Gender" />
                             <NativeSelect
                                 name="gender"
                                 className={classes.genderDropDown}
@@ -98,7 +89,7 @@ export default function CreateEmployeeModal(props) {
                             </NativeSelect>
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <label className='label'>Assigned Cafe</label>
+                            <TextFieldLabel name="Assigned Cafe" />
                             <NativeSelect
                                 name="cafeId"
                                 className={classes.genderDropDown}
