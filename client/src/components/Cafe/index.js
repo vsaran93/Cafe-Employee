@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { connect } from 'react-redux';
 import { Navigate } from 'react-router-dom';
-import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { withStyles } from '@mui/styles';
 
-import Header from '../Header';
+import MainLayout from '../Layouts/MainLayout';
 import { getAllCafes, createCafe, deleteCafe } from '../../actions/cafeAction';
 import { setLoading } from '../../actions/spinnerAction';
 import ActionCellRenderer from '../ActionCellRender';
@@ -136,35 +135,32 @@ class Cafe extends Component {
         }
 
         return (
-            <div>
-                <Header />
-                <Container maxWidth="false">
-                    <div className={classes.topContainer}>
-                        <Typography variant="h5" gutterBottom component="div">
-                            Cafes
-                        </Typography>
-                        <Button 
-                            variant="contained"
-                            onClick={this.openCreateModal}
+            <MainLayout>
+                <div className={classes.topContainer}>
+                    <Typography variant="h5" gutterBottom component="div">
+                        Cafes
+                    </Typography>
+                    <Button 
+                        variant="contained"
+                        onClick={this.openCreateModal}
+                    >
+                        Add Cafe
+                    </Button>
+                </div>
+                <div id="myGrid" className="ag-theme-alpine">
+                    <div style={{ width: '100%', height: '100%' }}>
+                        <AgGridReact
+                            rowData={rowData}
+                            columnDefs={columnDefs}
+                            rowSelection="single"
+                            onCellClicked={(e) => this.setSelectedCafeName(e)}
+                            components={{
+                                actionCellRenderer: ActionCellRenderer
+                            }}
                         >
-                            Add Cafe
-                        </Button>
+                        </AgGridReact>
                     </div>
-                    <div id="myGrid" className="ag-theme-alpine">
-                        <div style={{ width: '100%', height: '100%' }}>
-                            <AgGridReact
-                                rowData={rowData}
-                                columnDefs={columnDefs}
-                                rowSelection="single"
-                                onCellClicked={(e) => this.setSelectedCafeName(e)}
-                                components={{
-                                    actionCellRenderer: ActionCellRenderer
-                                }}
-                            >
-                            </AgGridReact>
-                        </div>
-                    </div>
-                </Container>
+                </div>
                 <ConfirmModal 
                     open={openModal} 
                     closeModal={this.closeModal}
@@ -178,7 +174,7 @@ class Cafe extends Component {
                     handleInputChange={this.handleInputChange}
                     handleCreateCafe={this.handleCreateCafe}
                 />
-            </div>
+            </MainLayout>
         );
     };
 }

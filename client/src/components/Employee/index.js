@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { connect } from 'react-redux';
 
-import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { withStyles } from '@mui/styles';
 import Button from '@mui/material/Button';
 
-import Header from '../Header';
+import MainLayout from '../Layouts/MainLayout';
 import { getAllEmployees, createEmployee, deleteEmployee } from '../../actions/employeeAction';
 import { setLoading } from '../../actions/spinnerAction';
 import ActionCellRenderer from '../ActionCellRender';
@@ -130,35 +129,32 @@ class Employee extends Component {
         // const cafeName = queryParams.get('cafeName');
 
         return (
-            <div>
-                <Header />
-                <Container maxWidth="false">
-                    <div className={classes.topContainer}>
-                        <Typography variant="h5" gutterBottom component="div">
-                            Employees
-                        </Typography>
-                        <Button 
-                            variant="contained"
-                            onClick={this.openCreateModal}
+            <MainLayout>
+                <div className={classes.topContainer}>
+                    <Typography variant="h5" gutterBottom component="div">
+                        Employees
+                    </Typography>
+                    <Button 
+                        variant="contained"
+                        onClick={this.openCreateModal}
+                    >
+                        Add Employee
+                    </Button>
+                </div>
+                <div id="myGrid" className="ag-theme-alpine">
+                    <div style={{ width: '100%', height: '100%' }}>
+                        <AgGridReact
+                            rowData={rowData}
+                            columnDefs={columnDefs}
+                            rowSelection="single"
+                            onGridReady={(params) => this.onGridReady(params)}
+                            components={{
+                                actionCellRenderer: ActionCellRenderer
+                            }}
                         >
-                            Add Employee
-                        </Button>
+                        </AgGridReact>
                     </div>
-                    <div id="myGrid" className="ag-theme-alpine">
-                        <div style={{ width: '100%', height: '100%' }}>
-                            <AgGridReact
-                                rowData={rowData}
-                                columnDefs={columnDefs}
-                                rowSelection="single"
-                                onGridReady={(params) => this.onGridReady(params)}
-                                components={{
-                                    actionCellRenderer: ActionCellRenderer
-                                }}
-                            >
-                            </AgGridReact>
-                        </div>
-                    </div>
-                </Container>
+                </div>
                 <ConfirmModal 
                     open={openConfirmModal}
                     closeModal={this.handleOpenConfirmModal}
@@ -172,7 +168,7 @@ class Employee extends Component {
                     handleInputChange={this.handleInputChange}
                     handleCreateEmployee={this.handleAddEmployee}
                 />
-            </div>
+            </MainLayout>
         );
     };
 }

@@ -1,7 +1,6 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -10,13 +9,12 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import NativeSelect from '@mui/material/NativeSelect';
 
+import MainLayout from '../Layouts/MainLayout';
 import { setLoading } from '../../actions/spinnerAction';
 import { getEmployeeById, updateEmployee } from '../../actions/employeeAction';
 import { availableCafes } from '../../actions/cafeAction';
 import LinearProgress from '../LinearProgress';
 import { displayOptions } from '../../utils/helper';
-
-import Header from '../Header';
 
 const useStyles = makeStyles({
     actionBtn: {
@@ -88,107 +86,104 @@ const EditEmployee = (props) => {
     };
 
     return (
-        <Fragment>
-            <Header />
-            <Container>
-                <Box
-                    component="form"
-                    className='edit-form'
-                    sx={{ flexFlow: 1 }}
-                    noValidate
-                    autoComplete="off"
+        <MainLayout>
+            <Box
+                component="form"
+                className='edit-form'
+                sx={{ flexFlow: 1 }}
+                noValidate
+                autoComplete="off"
+            >
+                <Typography component="h1" variant="h4" align="center">
+                    Edit Employee 
+                </Typography>
+                <LinearProgress loading={isLoading} />
+                <Grid 
+                    container 
+                    spacing={{ xs: 2, md: 3 }} 
+                    columns={{ xs: 4, sm: 8, md: 12 }}
+                    style={{ marginTop: 10 }}
                 >
-                     <Typography component="h1" variant="h4" align="center">
-                        Edit Employee 
-                    </Typography>
-                    <LinearProgress loading={isLoading} />
-                    <Grid 
-                        container 
-                        spacing={{ xs: 2, md: 3 }} 
-                        columns={{ xs: 4, sm: 8, md: 12 }}
-                        style={{ marginTop: 10 }}
+                    <Grid item xs={12} sm={6}>
+                        <label className='label'>Name</label>
+                        <TextField
+                            name="name"
+                            fullWidth 
+                            id="standard-basic" 
+                            variant="standard"
+                            value={employee.name || ''}
+                            onChange={handleChange}
+                            autoFocus
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <label className='label'>Email</label>
+                        <TextField 
+                            name="emailAddress"
+                            fullWidth 
+                            id="standard-basic" 
+                            variant="standard"
+                            value={employee.emailAddress || ''}
+                            onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <label className='label'>Phone</label>
+                        <TextField 
+                            name="phoneNumber"
+                            fullWidth 
+                            id="standard-basic" 
+                            variant="standard" 
+                            value={employee.phoneNumber || ''}
+                            onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <label className='label'>Gender</label>
+                        <NativeSelect
+                            name="gender"
+                            className={classes.genderDropDown}
+                            value={employee.gender || ''}
+                            onChange={handleChange}
+                        >
+                            <option value='male'>Male</option>
+                            <option value='female'>Female</option>
+                        </NativeSelect>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <label className='label'>Assigned Cafe</label>
+                        <NativeSelect
+                            name="cafeId"
+                            value={employee.cafeId || ''}
+                            className={classes.genderDropDown}
+                            onChange={handleChange}
+                        >
+                            <option>Select Cafe</option>
+                            {displayOptions(availableCafesList)}
+                        </NativeSelect>
+                    </Grid>
+                </Grid>
+                <div className={classes.btnContainer}>
+                    <Button
+                        onClick={goBack}
+                        className={classes.actionBtn} 
+                        variant="contained"
+                        color="error"
+                        disabled={isLoading}
                     >
-                        <Grid item xs={12} sm={6}>
-                            <label className='label'>Name</label>
-                            <TextField
-                                name="name"
-                                fullWidth 
-                                id="standard-basic" 
-                                variant="standard"
-                                value={employee.name || ''}
-                                onChange={handleChange}
-                                autoFocus
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <label className='label'>Email</label>
-                            <TextField 
-                                name="emailAddress"
-                                fullWidth 
-                                id="standard-basic" 
-                                variant="standard"
-                                value={employee.emailAddress || ''}
-                                onChange={handleChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <label className='label'>Phone</label>
-                            <TextField 
-                                name="phoneNumber"
-                                fullWidth 
-                                id="standard-basic" 
-                                variant="standard" 
-                                value={employee.phoneNumber || ''}
-                                onChange={handleChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <label className='label'>Gender</label>
-                            <NativeSelect
-                                name="gender"
-                                className={classes.genderDropDown}
-                                value={employee.gender || ''}
-                                onChange={handleChange}
-                            >
-                                <option value='male'>Male</option>
-                                <option value='female'>Female</option>
-                            </NativeSelect>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <label className='label'>Assigned Cafe</label>
-                            <NativeSelect
-                                name="cafeId"
-                                value={employee.cafeId || ''}
-                                className={classes.genderDropDown}
-                                onChange={handleChange}
-                            >
-                                <option>Select Cafe</option>
-                                {displayOptions(availableCafesList)}
-                            </NativeSelect>
-                        </Grid>
-                     </Grid>
-                     <div className={classes.btnContainer}>
-                        <Button
-                            onClick={goBack}
-                            className={classes.actionBtn} 
-                            variant="contained"
-                            color="error"
-                            disabled={isLoading}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            onClick={handleSave}
-                            className={classes.actionBtn} 
-                            variant="contained"
-                            disabled={isLoading}
-                        >
-                            Save
-                        </Button>
-                     </div>
-                </Box>
-            </Container>
-        </Fragment>
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={handleSave}
+                        className={classes.actionBtn} 
+                        variant="contained"
+                        disabled={isLoading}
+                    >
+                        Save
+                    </Button>
+                </div>
+            </Box>
+        </MainLayout>
     );
 };
 
