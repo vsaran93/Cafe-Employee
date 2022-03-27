@@ -41,8 +41,8 @@ export default function ButtonAppBar() {
               component="nav" 
               aria-label="secondary mailbox folder"
             >
-              {pages.map(page => (
-                <ListItem disablePadding>
+              {pages.map((page, index) => (
+                <ListItem disablePadding key={index}>
                   <Link className={styles.link} href={page.path} underline="none">{page.name}</Link>
                 </ListItem>
               ))}

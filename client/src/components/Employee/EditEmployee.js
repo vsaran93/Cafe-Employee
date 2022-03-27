@@ -8,14 +8,17 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import NativeSelect from '@mui/material/NativeSelect';
 
+
 import TextField from '../TextField';
 import TextFieldLabel from '../TextFieldLabel';
 import MainLayout from '../../Layouts/MainLayout';
+import RadioButton from '../RadioButton';
 import { setLoading } from '../../actions/spinnerAction';
 import { getEmployeeById, updateEmployee } from '../../actions/employeeAction';
 import { availableCafes } from '../../actions/cafeAction';
 import LinearProgress from '../LinearProgress';
 import { displayOptions } from '../../utils/helper';
+import { validateCreateEmployee } from '../../utils/helper';
 
 const useStyles = makeStyles({
     actionBtn: {
@@ -43,6 +46,7 @@ const employeeData = {
 
 const EditEmployee = (props) => {
     const [ employee, setEmployee ] = useState(employeeData);
+    const [ formErrors, setFormErrors ] = useState({});
     const classes = useStyles();
     const dispatch = useDispatch();
     const { employeeDetails } = useSelector(state => state.employee);
@@ -74,6 +78,11 @@ const EditEmployee = (props) => {
 
     const handleSave = (e) => {
         e.preventDefault();
+        const { isValid, errors } = validateCreateEmployee(employee);
+        if (!isValid) {
+            setFormErrors(errors);
+            return;
+        }
         dispatch(setLoading());
         dispatch(updateEmployee(params.id, {
             name: employee.name,
@@ -109,13 +118,15 @@ const EditEmployee = (props) => {
                         <TextFieldLabel name="Name"/>
                         <TextField
                             name="name"
-                            value={employee.name || ''}
+                            value={employee.name}
                             onChange={handleChange}
                             inputProps={{
                                 minLength: 6,
-                                maxlength: 10
+                                maxLength: 10
                             }}
                             autoFocus
+                            error={!!formErrors.name}
+                            helperText={formErrors.name || ''}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -124,6 +135,8 @@ const EditEmployee = (props) => {
                             name="emailAddress"
                             value={employee.emailAddress || ''}
                             onChange={handleChange}
+                            error={!!formErrors.emailAddress}
+                            helperText={formErrors.emailAddress || ''}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -132,19 +145,17 @@ const EditEmployee = (props) => {
                             name="phoneNumber"
                             value={employee.phoneNumber || ''}
                             onChange={handleChange}
+                            error={!!formErrors.phoneNumber}
+                            helperText={formErrors.phoneNumber || ''}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextFieldLabel name="Gender"/>
-                        <NativeSelect
+                        <RadioButton 
                             name="gender"
-                            className={classes.genderDropDown}
                             value={employee.gender || ''}
                             onChange={handleChange}
-                        >
-                            <option value='male'>Male</option>
-                            <option value='female'>Female</option>
-                        </NativeSelect>
+                        />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextFieldLabel name="Assigned Cafe"/>
@@ -153,6 +164,7 @@ const EditEmployee = (props) => {
                             value={employee.cafeId || ''}
                             className={classes.genderDropDown}
                             onChange={handleChange}
+                            error={!!formErrors.cafeId}
                         >
                             <option>Select Cafe</option>
                             {displayOptions(availableCafesList)}

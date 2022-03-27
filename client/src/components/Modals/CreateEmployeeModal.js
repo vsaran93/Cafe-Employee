@@ -29,7 +29,7 @@ export default function CreateEmployeeModal(props) {
   const classes = useStyles();
   const { availableCafesList } = useSelector(state => state.cafe);
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const { open, closeModal, handleInputChange, isLoading, handleCreateEmployee  } = props;
+  const { open, closeModal, handleInputChange, isLoading, handleCreateEmployee, formErrors  } = props;
 
   React.useEffect(() => {
     dispatch(availableCafes())
@@ -59,6 +59,8 @@ export default function CreateEmployeeModal(props) {
                             <TextField
                                 name="name"
                                 onChange={handleInputChange}
+                                error={formErrors.name || false}
+                                helperText={formErrors.name || ''}
                                 autoFocus
                             />
                         </Grid>
@@ -67,6 +69,8 @@ export default function CreateEmployeeModal(props) {
                             <TextField 
                                 name="emailAddress"
                                 onChange={handleInputChange}
+                                error={formErrors.emailAddress || false}
+                                helperText={formErrors.emailAddress || ''}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -74,6 +78,9 @@ export default function CreateEmployeeModal(props) {
                             <TextField
                                 name="phoneNumber"
                                 onChange={handleInputChange}
+                                error={formErrors.phoneNumber || false}
+                                helperText={formErrors.phoneNumber || ''}
+                                type="number"
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -82,6 +89,7 @@ export default function CreateEmployeeModal(props) {
                                 name="gender"
                                 className={classes.genderDropDown}
                                 onChange={handleInputChange}
+                                error={formErrors.gender || false}
                             >
                                 <option>Select Gender</option>
                                 <option value='male'>Male</option>
@@ -94,6 +102,7 @@ export default function CreateEmployeeModal(props) {
                                 name="cafeId"
                                 className={classes.genderDropDown}
                                 onChange={handleInputChange}
+                                error={formErrors.cafeId || false}
                             >
                                 <option>Select Cafe</option>
                                 {displayOptions(availableCafesList)}

@@ -6,12 +6,16 @@ import Typography from '@mui/material/Typography';
 import { withStyles } from '@mui/styles';
 import Button from '@mui/material/Button';
 
+
 import MainLayout from '../../Layouts/MainLayout';
+import CafeFilter from '../Filter/CafeFilter';
+import { availableCafes } from '../../actions/cafeAction';
 import { getAllEmployees, createEmployee, deleteEmployee } from '../../actions/employeeAction';
 import { setLoading } from '../../actions/spinnerAction';
 import ActionCellRenderer from '../ActionCellRender';
 import CreateEmployeeModal from '../Modals/CreateEmployeeModal';
 import ConfirmModal from '../Modals/ConfirmModal';
+import { validateCreateEmployee } from '../../utils/helper';
 
 
 const styles = {
@@ -20,6 +24,10 @@ const styles = {
         marginTop: 15,
         marginBottom: 15,
         justifyContent: 'space-between'
+    },
+    filterContainer: {
+        marginTop: 15,
+        marginBottom: 15,
     }
 };
 
@@ -60,14 +68,22 @@ class Employee extends Component {
             ],
             openCreateModal: false,
             employee: {},
-            selectedEmployeeId: ''
+            selectedEmployeeId: '',
+            formErrors: {},
+            selectedCafe: '',
         };
+        this.loadFilteredList = false;
     }
     
 
     componentDidMount() {
-        const { getAllEmployees } = this.props;
+        const { getAllEmployees, availableCafes } = this.props;
+        const queryParams = new URLSearchParams(window.location.search);
+        const cafeName = queryParams.get('cafeName') || '';
+        this.setState({ selectedCafe: cafeName });
         getAllEmployees();
+        availableCafes()
+
     }
 
     componentDidUpdate(preProps) {
@@ -84,9 +100,10 @@ class Employee extends Component {
     }
 
     handleInputChange = (e) => {
-        const { employee } = this.state;
+        const { employee, formErrors } = this.state;
         employee[e.target.name] = e.target.value;
-        this.setState(employee)
+        formErrors[e.target.name] = '';
+        this.setState({ employee, formErrors })
     };
 
     closeCreateModal = () => {
@@ -101,6 +118,11 @@ class Employee extends Component {
         const { employee } = this.state;
         const { createEmployee, setLoading, getAllEmployees } = this.props;
         e.preventDefault();
+        const { isValid, errors } = validateCreateEmployee(employee);
+        if (!isValid) {
+            this.setState({ formErrors: errors });
+            return;
+        }
         setLoading();
         createEmployee(employee, () => {
             getAllEmployees();
@@ -124,11 +146,25 @@ class Employee extends Component {
         this.setState({ openConfirmModal: !openConfirmModal, selectedEmployeeId: employeeId });
     };
 
+    onFilterTextChange = (e) => {
+        this.setState({ selectedCafe: e.target.value });
+        this.gridApi.setQuickFilter(e.target.value);
+    };
+
+    clearFilter = () => {
+        this.setState({ selectedCafe: '' });
+        this.gridApi.setQuickFilter('');
+    }
+
     render() {
-        const { rowData, columnDefs, openCreateModal, openConfirmModal } = this.state;
-        const { classes, isLoading } = this.props;
-        // const queryParams = new URLSearchParams(window.location.search);
-        // const cafeName = queryParams.get('cafeName');
+        const { rowData, columnDefs, openCreateModal, 
+            openConfirmModal, formErrors, selectedCafe } = this.state;
+        const { classes, isLoading, availableCafesList } = this.props;
+       
+        if(!this.loadFilteredList && this.gridApi && selectedCafe) {
+            this.gridApi.setQuickFilter(selectedCafe);
+            this.loadFilteredList = true;
+        }
 
         return (
             <MainLayout>
@@ -142,6 +178,14 @@ class Employee extends Component {
                     >
                         Add Employee
                     </Button>
+                </div>
+                <div className={classes.filterContainer}>
+                    <CafeFilter
+                        cafes={availableCafesList}
+                        selectedCafe={selectedCafe}
+                        onFilterTextChange={this.onFilterTextChange}
+                        clearFilter={this.clearFilter}
+                    />
                 </div>
                 <div id="myGrid" className="ag-theme-alpine">
                     <div style={{ width: '100%', height: '100%' }}>
@@ -169,6 +213,7 @@ class Employee extends Component {
                     closeModal={this.closeCreateModal}
                     handleInputChange={this.handleInputChange}
                     handleCreateEmployee={this.handleAddEmployee}
+                    formErrors={formErrors}
                 />
             </MainLayout>
         );
@@ -177,14 +222,16 @@ class Employee extends Component {
 
 const mapStateToProps = (state) => ({
     employees: state.employee.employees,
-    isLoading: state.spinner.isLoading
+    isLoading: state.spinner.isLoading,
+    availableCafesList: state.cafe.availableCafesList
 });
 
 const mapDispatchToProps = {
     getAllEmployees,
     createEmployee,
     deleteEmployee,
-    setLoading
+    setLoading,
+    availableCafes
 }
 
 
