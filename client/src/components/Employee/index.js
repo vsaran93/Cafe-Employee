@@ -52,7 +52,7 @@ class Employee extends Component {
                     },
                     filter: 'agTextColumnFilter'
                 },
-                { field: "daysWorked" },
+                { field: "daysWorked", headerName: "Days worked in the cafe" },
                 {
                     headerName: 'Action',
                     cellRenderer: 'actionCellRenderer',
