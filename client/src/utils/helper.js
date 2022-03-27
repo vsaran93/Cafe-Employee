@@ -47,3 +47,25 @@ export const validateCreateEmployee = (employee) => {
         errors
     }
 }
+
+
+export const validateCafe = (cafe) => {
+    let isValid = true;
+    let errors = {};
+    if (!cafe.name) {
+        isValid = false;
+        errors.name = 'Please enter name';
+    }
+    if (!cafe.location) {
+        isValid = false;
+        errors.location = 'Please enter location';
+    }
+    if (!cafe.description) {
+        isValid = false;
+        errors.description = 'Please enter description';
+    }
+    return {
+        isValid,
+        errors
+    }
+}

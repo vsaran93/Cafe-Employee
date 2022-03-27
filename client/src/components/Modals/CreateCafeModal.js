@@ -16,7 +16,8 @@ import LinearProgress from '../LinearProgress';
 export default function CreateCafeModal(props) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const { open, closeModal, handleInputChange, handleCreateCafe, isLoading } = props;
+  const { open, closeModal, handleInputChange, handleCreateCafe, 
+    isLoading, formErrors } = props;
   return (
     <div>
       <Dialog
@@ -42,6 +43,8 @@ export default function CreateCafeModal(props) {
                             name="name"
                             autoFocus
                             onChange={handleInputChange}
+                            error={!!formErrors.name}
+                            helperText={formErrors.name || ''}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -49,6 +52,8 @@ export default function CreateCafeModal(props) {
                         <TextField 
                             name="location"
                             onChange={handleInputChange}
+                            error={!!formErrors.location}
+                            helperText={formErrors.location || ''}
                         />
                     </Grid>
                     <Grid item xs={12} sm={12}>
@@ -56,6 +61,8 @@ export default function CreateCafeModal(props) {
                         <TextField 
                             name="description"
                             onChange={handleInputChange}
+                            error={!!formErrors.description}
+                            helperText={formErrors.description || ''}
                         />
                     </Grid>
                 </Grid>

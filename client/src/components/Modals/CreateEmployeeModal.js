@@ -13,6 +13,7 @@ import { makeStyles } from '@mui/styles';
 
 import TextField from '../TextField';
 import TextFieldLabel from '../TextFieldLabel';
+import RadioButton from '../RadioButton';
 import { availableCafes } from '../../actions/cafeAction';
 import { displayOptions } from '../../utils/helper';
 import LinearProgress from '../LinearProgress';
@@ -59,7 +60,7 @@ export default function CreateEmployeeModal(props) {
                             <TextField
                                 name="name"
                                 onChange={handleInputChange}
-                                error={formErrors.name || false}
+                                error={!!formErrors.name}
                                 helperText={formErrors.name || ''}
                                 autoFocus
                             />
@@ -69,7 +70,7 @@ export default function CreateEmployeeModal(props) {
                             <TextField 
                                 name="emailAddress"
                                 onChange={handleInputChange}
-                                error={formErrors.emailAddress || false}
+                                error={!!formErrors.emailAddress}
                                 helperText={formErrors.emailAddress || ''}
                             />
                         </Grid>
@@ -78,23 +79,17 @@ export default function CreateEmployeeModal(props) {
                             <TextField
                                 name="phoneNumber"
                                 onChange={handleInputChange}
-                                error={formErrors.phoneNumber || false}
+                                error={!!formErrors.phoneNumber}
                                 helperText={formErrors.phoneNumber || ''}
                                 type="number"
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextFieldLabel name="Gender" />
-                            <NativeSelect
-                                name="gender"
-                                className={classes.genderDropDown}
-                                onChange={handleInputChange}
-                                error={formErrors.gender || false}
-                            >
-                                <option>Select Gender</option>
-                                <option value='male'>Male</option>
-                                <option value='female'>Female</option>
-                            </NativeSelect>
+                            <RadioButton 
+                              name="gender"
+                              onChange={handleInputChange}
+                            />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextFieldLabel name="Assigned Cafe" />

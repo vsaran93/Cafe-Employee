@@ -12,6 +12,7 @@ import { setLoading } from '../../actions/spinnerAction';
 import ActionCellRenderer from '../ActionCellRender';
 import ConfirmModal from '../Modals/ConfirmModal';
 import CreateCafeModal from '../Modals/CreateCafeModal'; 
+import { validateCafe } from '../../utils/helper';
 
 
 const styles = {
@@ -57,6 +58,7 @@ class Cafe extends Component {
             selectedCafeName: '',
             selectedCafeId: '',
             cafe: {},
+            formErrors: {}
         };
     }
     
@@ -100,15 +102,21 @@ class Cafe extends Component {
 
 
     handleInputChange = (e) => {
-        const { cafe } = this.state;
+        const { cafe, formErrors } = this.state;
         cafe[e.target.name] = e.target.value;
-        this.setState({ cafe });
+        formErrors[e.target.name] = '';
+        this.setState({ cafe, formErrors });
     };
 
     handleCreateCafe = (e) => {
         e.preventDefault();
         const { createCafe, setLoading, getAllCafes } = this.props;
         const { cafe } = this.state;
+        const { isValid, errors } = validateCafe(cafe);
+        if (!isValid) {
+            this.setState({ formErrors: errors });
+            return;
+        }
         setLoading(true);
         createCafe(cafe, () => {
             getAllCafes();
@@ -128,7 +136,8 @@ class Cafe extends Component {
     };
 
     render() {
-        const { rowData, columnDefs, selectedCafeName, openModal, openCreateModal } = this.state;
+        const { rowData, columnDefs, selectedCafeName, openModal, 
+            openCreateModal, formErrors } = this.state;
         const { classes, isLoading } = this.props;
         if (selectedCafeName) {
             return <Navigate to={`/employee?cafeName=${selectedCafeName}`} />
@@ -173,6 +182,7 @@ class Cafe extends Component {
                     closeModal={this.closeCreateModal}
                     handleInputChange={this.handleInputChange}
                     handleCreateCafe={this.handleCreateCafe}
+                    formErrors={formErrors}
                 />
             </MainLayout>
         );

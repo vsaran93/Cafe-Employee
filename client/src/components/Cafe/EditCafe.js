@@ -13,6 +13,7 @@ import MainLayout from '../../Layouts/MainLayout';
 import { setLoading } from '../../actions/spinnerAction';
 import { getCafeDetails, updateCafe } from '../../actions/cafeAction';
 import LinearProgress from '../LinearProgress';
+import { validateCafe } from '../../utils/helper';
 
 
 const useStyles = makeStyles({
@@ -28,7 +29,8 @@ const useStyles = makeStyles({
     }
 });
 const EditCafe = (props) => {
-    const [ cafe, setCafe ] = useState({})
+    const [ cafe, setCafe ] = useState({});
+    const [ formErrors, setFormErrors ] = useState({});
     const classes = useStyles();
     const dispatch = useDispatch();
     const { cafeDetails } = useSelector(state => state.cafe);
@@ -58,6 +60,11 @@ const EditCafe = (props) => {
 
     const handleSave = (e) => {
         e.preventDefault();
+        const { isValid, errors } = validateCafe(cafe);
+        if (!isValid) {
+            setFormErrors(errors);
+            return;
+        }
         dispatch(setLoading());
         dispatch(updateCafe({
             name: cafe.name,
@@ -94,19 +101,19 @@ const EditCafe = (props) => {
                             name="name"
                             value={cafe.name || ''}
                             onChange={handleChange}
-                            inputProps={{
-                                minLength: 6,
-                                maxlength: 10
-                            }}
                             autoFocus
+                            error={!!formErrors.name}
+                            helperText={formErrors.name || ''}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextFieldLabel name="Location"/>
                         <TextField 
-                            name="Location"
+                            name="location"
                             value={cafe.location || ''}
                             onChange={handleChange}
+                            error={!!formErrors.location}
+                            helperText={formErrors.location || ''}
                         />
                     </Grid>
                     <Grid item xs={12} sm={12}>
@@ -118,6 +125,8 @@ const EditCafe = (props) => {
                             inputProps={{
                                 maxlength: 256
                             }}
+                            error={!!formErrors.description}
+                            helperText={formErrors.description || ''}
                         />
                     </Grid>
                 </Grid>
