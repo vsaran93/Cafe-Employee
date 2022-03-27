@@ -30,6 +30,7 @@ class Employee extends Component {
             rowData: [],
             openConfirmModal: false,
             columnDefs: [
+                { field: "id", headerName: "Employee Id"},
                 { field: "name" },
                 { field: "emailAddress" },
                 { field: "phoneNumber" },
@@ -43,6 +44,7 @@ class Employee extends Component {
                     },
                     filter: 'agTextColumnFilter'
                 },
+                { field: "daysWorked" },
                 {
                     headerName: 'Action',
                     cellRenderer: 'actionCellRenderer',

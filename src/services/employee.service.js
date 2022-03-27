@@ -2,7 +2,7 @@ const { Op } = require('sequelize');
 const Cafe = require('../models').Cafe;
 const Employee = require('../models').Employee;
 const ApiError = require('../utils/ApiError');
-
+const sequelize = require('../models').sequelize;
 
 const create = async (employeeData) => {
     const isEmployeeExist = await findEmployeeByEmail(employeeData.emailAddress);
@@ -39,7 +39,16 @@ const getAllEmployees = async (args) => {
     if (cafe) {
         whereObj.cafeId = cafe;
     }
-    return Employee.findAll({ 
+    return Employee.findAll({
+        attributes: [
+            [sequelize.fn('datediff', sequelize.fn("NOW") , sequelize.col('startDate')), 'daysWorked'],
+            'id',
+            'name',
+            'emailAddress',
+            'gender',
+            'cafeId',
+            'phoneNumber'
+        ],
         where: whereObj,
         include: [
             {

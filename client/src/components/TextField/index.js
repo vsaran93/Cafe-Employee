@@ -8,7 +8,7 @@ const TextFieldArea = ({ name, value, onChange, ...props }) => {
             fullWidth 
             id="standard-basic" 
             variant="standard"
-            value={value || ''}
+            value={value}
             onChange={onChange}
             {...props}
         />

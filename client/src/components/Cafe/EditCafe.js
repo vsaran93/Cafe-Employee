@@ -92,7 +92,7 @@ const EditCafe = (props) => {
                         <TextFieldLabel name="Name"/>
                         <TextField
                             name="name"
-                            value={cafe.name}
+                            value={cafe.name || ''}
                             onChange={handleChange}
                             inputProps={{
                                 minLength: 6,
@@ -105,7 +105,7 @@ const EditCafe = (props) => {
                         <TextFieldLabel name="Location"/>
                         <TextField 
                             name="Location"
-                            value={cafe.location}
+                            value={cafe.location || ''}
                             onChange={handleChange}
                         />
                     </Grid>
@@ -113,7 +113,7 @@ const EditCafe = (props) => {
                         <TextFieldLabel name="Description"/>
                         <TextField 
                             name="description"
-                            value={cafe.description}
+                            value={cafe.description || ''}
                             onChange={handleChange}
                             inputProps={{
                                 maxlength: 256

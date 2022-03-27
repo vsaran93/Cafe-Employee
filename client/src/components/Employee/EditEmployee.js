@@ -109,7 +109,7 @@ const EditEmployee = (props) => {
                         <TextFieldLabel name="Name"/>
                         <TextField
                             name="name"
-                            value={employee.name}
+                            value={employee.name || ''}
                             onChange={handleChange}
                             inputProps={{
                                 minLength: 6,
@@ -122,7 +122,7 @@ const EditEmployee = (props) => {
                         <TextFieldLabel name="Email"/>
                         <TextField 
                             name="emailAddress"
-                            value={employee.emailAddress}
+                            value={employee.emailAddress || ''}
                             onChange={handleChange}
                         />
                     </Grid>
@@ -130,7 +130,7 @@ const EditEmployee = (props) => {
                         <TextFieldLabel name="Phone"/>
                         <TextField 
                             name="phoneNumber"
-                            value={employee.phoneNumber}
+                            value={employee.phoneNumber || ''}
                             onChange={handleChange}
                         />
                     </Grid>
