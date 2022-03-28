@@ -40,7 +40,7 @@ const employeeData = {
     name: '',
     emailAddress: '',
     phoneNumber: '',
-    gender: '',
+    gender: 'male',
     cafeId: ''
 };
 

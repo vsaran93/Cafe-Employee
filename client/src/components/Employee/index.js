@@ -67,7 +67,7 @@ class Employee extends Component {
                 }
             ],
             openCreateModal: false,
-            employee: {},
+            employee: { gender: 'male' },
             selectedEmployeeId: '',
             formErrors: {},
             selectedCafe: '',
