@@ -22,8 +22,8 @@ inside the src directory create .env file for back-end enviroment specific confi
 and create .env.development file inside the client directory using .env.development.sample file for front-end enviroment configurations.
 
 ## Migrations
-```
 after done above steps, use below commands to run the database migrations
+```
 npx sequelize-cli db:migrate
 ```
 
